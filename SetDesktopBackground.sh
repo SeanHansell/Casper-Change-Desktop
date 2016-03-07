@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to set desktop background for students
+# Script to set desktop background via Casper
 
 # Author : Richard Purves <r.purves@arts.ac.uk>, Sean Hansell <sean@morelen.net>
 # Version 1.0 : Initial Version
@@ -9,10 +9,11 @@
 # Version 1.3 : 2016-03-07 - Overhaul to variablize the desktop picture path.
 
 desktop_picture="${4}"
-
 os_version=$( sw_vers | grep ProductVersion: | awk '{print $2}' | sed 's/\./\ /g' | awk '{print $2}' )
 current_user=$( ls -l /dev/console | awk '{print $3}' )
 current_user_home=$( dscl . -read "/Users/${current_user}" NFSHomeDirectory | sed 's/NFSHomeDirectory\:\ //' )
+desktop_db="${current_user_home}/Library/Application Support/Dock/desktoppicture.db"
+desktop_domain="${current_user_home}/Library/Preferences/com.apple.desktop"
 
 if [[ -z "${desktop_picture}" ]]
 then
@@ -21,13 +22,13 @@ fi
 
 if (( $os_version > 8 ))
 then
-	sqlite3 "${current_user_home}/Library/Application Support/Dock/desktoppicture.db" << EOF
+	sqlite3 "${desktop_db}" << EOF
 		UPDATE data SET value = "${desktop_picture}";
 		.quit
 	EOF
 else
-	defaults delete com.apple.desktop Background
-	defaults write com.apple.desktop Background '{default = {ImageFilePath = "'"${desktop_picture}"'";};}'
+	defaults delete "${desktop_domain}" Background
+	defaults write "${desktop_domain}" Background '{default = {ImageFilePath = "'"${desktop_picture}"'";};}'
 fi
 
 killall Dock
