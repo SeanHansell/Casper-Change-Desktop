@@ -13,38 +13,29 @@ currentuser=$( ls -l /dev/console | awk '{print $3}' )
 
 if [ "$4" = "custom" ]
 then
-
-if (( $os_version > 8 ))
-then
-
-sqlite3 /Users/$currentuser/Library/Application\ Support/Dock/desktoppicture.db << EOF
-UPDATE data SET value = "/Users/Shared/Background/custombg.jpeg";
-.quit
-EOF
-
-killall Dock
-
+	if (( $os_version > 8 ))
+	then
+		sqlite3 /Users/$currentuser/Library/Application\ Support/Dock/desktoppicture.db << EOF
+			UPDATE data SET value = "/Users/Shared/Background/custombg.jpeg";
+			.quit
+			EOF
+		killall Dock
+	else
+		defaults write com.apple.desktop Background '{default = {ImageFilePath = "/Users/Shared/Background/custombg.jpeg"; };}'
+		killall Dock
+	fi
 else
-#defaults write com.apple.desktop Background '{default = {ImageFilePath = "/Users/Shared/Background/custombg.jpeg"; };}'
-killall Dock
+	if (( $os_version > 8 ))
+	then
+		sqlite3 /Users/$currentuser/Library/Application\ Support/Dock/desktoppicture.db << EOF
+			UPDATE data SET value = "/Library/Desktop Pictures/default_grey2560x1600.jpeg";
+			.quit
+			EOF
+		killall Dock
+	else
+		defaults write com.apple.desktop Background '{default = {ImageFilePath = "/Library/Desktop Pictures/default_grey2560x1600.jpeg"; };}'
+		killall Dock
+	fi
 fi
 
-else
-
-if (( $os_version > 8 ))
-then
-
-sqlite3 /Users/$currentuser/Library/Application\ Support/Dock/desktoppicture.db << EOF
-UPDATE data SET value = "/Library/Desktop Pictures/default_grey2560x1600.jpeg";
-.quit
-EOF
-
-killall Dock
-
-else
-defaults write com.apple.desktop Background '{default = {ImageFilePath = "/Library/Desktop Pictures/default_grey2560x1600.jpeg"; };}'
-killall Dock
-fi
-
-fi
 exit 0
