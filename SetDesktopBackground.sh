@@ -9,13 +9,14 @@
 
 
 os_version=$( sw_vers | grep ProductVersion: | awk '{print $2}' | sed 's/\./\ /g' | awk '{print $2}' )
-currentuser=$( ls -l /dev/console | awk '{print $3}' )
+current_user=$( ls -l /dev/console | awk '{print $3}' )
+current_user_home=$( dscl . -read /Users/sean NFSHomeDirectory | sed 's/NFSHomeDirectory\:\ //' )
 
-if [ "$4" = "custom" ]
+if [[ "$4" = "custom" ]]
 then
 	if (( $os_version > 8 ))
 	then
-		sqlite3 /Users/$currentuser/Library/Application\ Support/Dock/desktoppicture.db << EOF
+		sqlite3 "/Users/${current_user_home}/Library/Application Support/Dock/desktoppicture.db" << EOF
 			UPDATE data SET value = "/Users/Shared/Background/custombg.jpeg";
 			.quit
 			EOF
@@ -27,7 +28,7 @@ then
 else
 	if (( $os_version > 8 ))
 	then
-		sqlite3 /Users/$currentuser/Library/Application\ Support/Dock/desktoppicture.db << EOF
+		sqlite3 "/Users/${current_user_home}/Library/Application Support/Dock/desktoppicture.db" << EOF
 			UPDATE data SET value = "/Library/Desktop Pictures/default_grey2560x1600.jpeg";
 			.quit
 			EOF
