@@ -17,6 +17,7 @@ current_user=$( ls -l /dev/console | awk '{print $3}' )
 current_user_home=$( dscl . -read "/Users/${current_user}" NFSHomeDirectory | sed 's/NFSHomeDirectory\:\ //' )
 desktop_db="${current_user_home}/Library/Application Support/Dock/desktoppicture.db"
 desktop_domain="${current_user_home}/Library/Preferences/com.apple.desktop"
+desktop_plist="${desktop_domain}.plist"
 
 if [[ -z "${desktop_picture}" ]]
 then
@@ -33,6 +34,7 @@ EOF
 else
 	defaults delete "${desktop_domain}" Background
 	defaults write "${desktop_domain}" Background '{default = {ImageFilePath = "'"${desktop_picture}"'";};}'
+	chown "${current_user_home}" "${desktop_plist}" # Previous commands change ownership to root. Maintaining ownership.
 fi
 
 killall Dock
