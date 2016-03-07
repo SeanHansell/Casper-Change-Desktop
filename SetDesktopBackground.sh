@@ -7,6 +7,7 @@
 # Version 1.1 : 2014-04-23 - Massive reworking to use Applescript for 10.8 and below or modify the sqlite DB for 10.9+
 # Version 1.2 : 2014-04-24 - Removed AppleScript because of osascript parsing issues. Replaced with MCX.
 # Version 1.3 : 2016-03-07 - Overhaul to variablize the desktop picture path.
+#       1.3.1 : 2016-03-07 - Added root check to catch situations where the login window is up.
 
 # Casper Static Variables
 desktop_picture="${4}" # Path to Desktop Picture. Define this in Casper.
@@ -23,6 +24,12 @@ if [[ -z "${desktop_picture}" ]]
 then
 	echo "desktop_picture variable is empty. Nothing to do."
 	exit 1
+fi
+
+if [[ "${current_user}" == "root" ]]
+then
+	echo "No user logged in. Nothing to do."
+	exit 0
 fi
 
 if (( $os_version > 8 ))
