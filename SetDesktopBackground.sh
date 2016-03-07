@@ -34,7 +34,7 @@ EOF
 else
 	defaults delete "${desktop_domain}" Background
 	defaults write "${desktop_domain}" Background '{default = {ImageFilePath = "'"${desktop_picture}"'";};}'
-	chown "${current_user_home}" "${desktop_plist}" # Previous commands change ownership to root. Maintaining ownership.
+	chown "${current_user}" "${desktop_plist}" # Previous commands change ownership to root. Maintaining ownership.
 fi
 
 killall Dock
