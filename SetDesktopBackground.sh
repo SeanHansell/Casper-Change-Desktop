@@ -7,13 +7,14 @@
 # Version 1.1 : 23/04/2014 - Massive reworking to use applescript for 10.8 and below, modify the db for 10.9+
 # Version 1.2 : 24/04/2014 - Removed applescript because of osascript parsing issues. replaced with mcx.
 
-OSversion=$( sw_vers | grep ProductVersion: | cut -c 20-20 )
+
+os_version=$( sw_vers | grep ProductVersion: | awk '{print $2}' | sed 's/\./\ /g' | awk '{print $2}' )
 currentuser=$( ls -l /dev/console | awk '{print $3}' )
 
-if [ "$4" = "custom" ];
+if [ "$4" = "custom" ]
 then
 
-if [[ "$OSversion" -ge "9" ]];
+if (( $os_version > 8 ))
 then
 
 sqlite3 /Users/$currentuser/Library/Application\ Support/Dock/desktoppicture.db << EOF
@@ -24,13 +25,13 @@ EOF
 killall Dock
 
 else
-defaults write com.apple.desktop Background '{default = {ImageFilePath = "/Users/Shared/Background/custombg.jpeg"; };}'
+#defaults write com.apple.desktop Background '{default = {ImageFilePath = "/Users/Shared/Background/custombg.jpeg"; };}'
 killall Dock
 fi
 
 else
 
-if [[ "$OSversion" -ge "9" ]];
+if (( $os_version > 8 ))
 then
 
 sqlite3 /Users/$currentuser/Library/Application\ Support/Dock/desktoppicture.db << EOF
