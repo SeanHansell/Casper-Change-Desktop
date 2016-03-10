@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to set desktop background via Casper. Forked from the original work of Richard Purves <r.purves@arts.ac.uk>.
+# Script to set desktop background via Casper. Forked from the original work of Richard Purves <richard@richard-purves.com>.
 
 # Maintainer : Sean Hansell <sean@morelen.net>
 # Version 1.0 : Initial Version
