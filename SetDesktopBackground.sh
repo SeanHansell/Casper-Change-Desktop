@@ -35,7 +35,7 @@ fi
 if (( $os_version > 8 ))
 then
 	sqlite3 "${desktop_db}" << EOF
-UPDATE data SET value = "${desktop_picture}";
+UPDATE data SET value="${desktop_picture}";
 .quit
 EOF
 else
